@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 8% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 8% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 195 100% 50%;
+    --primary-foreground: 240 10% 3.9%;
+
+    --secondary: 280 100% 70%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 8% 15%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 195 100% 50%;
+    --accent-foreground: 240 10% 3.9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 8% 15%;
+    --input: 240 8% 15%;
+    --ring: 195 100% 50%;
+
+    --radius: 1rem;
+
+    /* Custom design tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(195, 100%, 50%), hsl(280, 100%, 70%));
+    --gradient-card: linear-gradient(135deg, hsl(240, 8%, 12%), hsl(240, 8%, 8%));
+    --glow-primary: 0 0 40px hsl(195, 100%, 50% / 0.3);
+    --glow-secondary: 0 0 40px hsl(280, 100%, 70% / 0.3);
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  * {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 900;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(195, 100%, 50%), hsl(280, 100%, 70%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .card-gradient {
+    background: linear-gradient(135deg, hsl(240, 8%, 12%), hsl(240, 8%, 8%));
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 40px hsl(195, 100%, 50% / 0.3);
+  }
+
+  .glow-secondary {
+    box-shadow: 0 0 40px hsl(280, 100%, 70% / 0.3);
+  }
+
+  .clip-path-hexagon {
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
