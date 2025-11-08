@@ -1,99 +1,81 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { Resend } from "https://esm.sh/resend@4.0.0";
+import React, { useState } from "react";
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const Index = () => {
+  const [loading, setLoading] = useState(false);
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-};
+  const handleContact = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
 
-interface ContactEmailRequest {
-  name: string;
-  email: string;
-  message: string;
-}
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const message = formData.get("message");
 
-const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+    try {
+      const response = await fetch("https://sanjaypraka-sanjay-cont-90-am0bh9z9gt18.deno.dev/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
 
-  try {
-    const { name, email, message }: ContactEmailRequest = await req.json();
+      const data = await response.json();
 
-    console.log("Sending contact email from:", name, email);
-
-    // Validate input
-    if (!name || !email || !message) {
-      return new Response(
-        JSON.stringify({ error: "Missing required fields" }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json", ...corsHeaders },
-        }
-      );
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return new Response(
-        JSON.stringify({ error: "Invalid email format" }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json", ...corsHeaders },
-        }
-      );
-    }
-
-    // Send email to your Gmail
-    const emailResponse = await resend.emails.send({
-      from: "Portfolio Contact <onboarding@resend.dev>",
-      to: ["sanjaychavan487652@gmail.com"],
-      replyTo: email,
-      subject: `New Contact Form Message from ${name}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #333; border-bottom: 2px solid #4F46E5; padding-bottom: 10px;">
-            New Contact Form Submission
-          </h2>
-          <div style="margin: 20px 0; padding: 20px; background-color: #f5f5f5; border-radius: 8px;">
-            <p style="margin: 10px 0;"><strong>Name:</strong> ${name}</p>
-            <p style="margin: 10px 0;"><strong>Email:</strong> ${email}</p>
-            <p style="margin: 10px 0;"><strong>Message:</strong></p>
-            <div style="padding: 15px; background-color: white; border-left: 4px solid #4F46E5; margin-top: 10px;">
-              ${message.replace(/\n/g, '<br>')}
-            </div>
-          </div>
-          <p style="color: #666; font-size: 12px; margin-top: 20px;">
-            This message was sent from your portfolio contact form.
-          </p>
-        </div>
-      `,
-    });
-
-    console.log("Email sent successfully:", emailResponse);
-
-    return new Response(JSON.stringify({ success: true, data: emailResponse }), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        ...corsHeaders,
-      },
-    });
-  } catch (error: any) {
-    console.error("Error in send-contact-email function:", error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
+      if (data.success) {
+        alert("✅ Message sent successfully!");
+        form.reset();
+      } else {
+        alert("❌ Failed to send message. Please try again.");
       }
-    );
-  }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      alert("⚠️ Something went wrong. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <main className="flex flex-col items-center justify-center h-screen bg-background text-foreground text-center">
+      <h1 className="text-4xl font-bold mb-4">Sanjay Prakash Chavan</h1>
+      <p className="mb-8 text-gray-400">
+        Full Stack Developer & Machine Learning Enthusiast 🚀
+      </p>
+
+      <form onSubmit={handleContact} className="flex flex-col gap-3 w-80">
+        <input
+          name="name"
+          placeholder="Your Name"
+          className="border rounded p-2 text-black"
+          required
+        />
+        <input
+          name="email"
+          type="email"
+          placeholder="Your Email"
+          className="border rounded p-2 text-black"
+          required
+        />
+        <textarea
+          name="message"
+          placeholder="Your Message"
+          className="border rounded p-2 text-black"
+          rows={4}
+          required
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className={`${
+            loading ? "bg-gray-500" : "bg-primary hover:bg-primary/80"
+          } text-primary-foreground px-4 py-2 rounded`}
+        >
+          {loading ? "Sending..." : "Send Message"}
+        </button>
+      </form>
+    </main>
+  );
 };
 
-serve(handler);
+export default Index;

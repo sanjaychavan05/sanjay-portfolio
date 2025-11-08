@@ -15,14 +15,14 @@ const projects = [
     title: "Real-Time Website Safety Checker",
     description: "Browser extension for real-time phishing and malware detection with instant safety alerts",
     tech: "JavaScript, Google Safe Browsing API, Chrome Extension",
-    github: "https://github.com/sanjaychavan05",
+    github: "https://github.com/sanjaychavan05/Real-Time-Website-Safety-Checker",
     image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80"
   },
   {
     title: "Product Price Prediction",
     description: "Machine learning model for predicting product prices using advanced regression techniques and feature engineering. Achieved competitive accuracy scores in the national-level hackathon competition",
     tech: "Python, Scikit-learn, Pandas, Machine Learning",
-    github: "https://github.com/sanjaychavan05",
+    github: "https://github.com/sanjaychavan05/Product-Price-Prediction",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80"
   },
   {
